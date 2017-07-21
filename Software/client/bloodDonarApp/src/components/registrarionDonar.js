@@ -1,20 +1,23 @@
 /**
  * Created by semanticbits on 19/7/17.
  */
-
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form';
 import autobind from 'autobind-decorator'
 import { Grid, Row, Col ,Panel ,Form ,FormGroup,ControlLabel,Button,FormControl,Radio,Checkbox } from 'react-bootstrap'
 import {Nav,Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
+import { NEW_DONAR_REGISTERED_DATA } from '../actions/actions'
+
 export const fields=[ 'firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone']
 
 @autobind
 class RegistrationForm extends Component {
+    NEW_DONAR_REGISTERED_DATA(){
+        let { dispatch } =this.props
+        dispatch(NEW_DONAR_REGISTERED_DATA(this.props.values))
+    }
     render() {
         const { fields: { firstName, lastName, occupation, martial_status, dob, p_email, p_phone, e_email, e_phone },
-            handleSubmit,
-            resetForm,
             submitting,
             pristine, reset
         } = this.props;
@@ -42,7 +45,7 @@ class RegistrationForm extends Component {
                                 </Col>
                             </FormGroup>
                             <FormGroup controlId="martial_status">
-                                <Col componentClass={ControlLabel} sm={3}>Martial Status</Col>
+                                <Col componentClass={ControlLabel} sm={2}>Martial Status</Col>
                                 <Radio name="radioGroup" inline {...martial_status } value="Married" checked={martial_status.value === 'Married'}>
                                     Married
                                 </Radio>
@@ -90,7 +93,7 @@ class RegistrationForm extends Component {
                         </Panel>
                         <FormGroup>
                             <Col smOffset={2} sm={10}>
-                                <Button type="button" className="pull-right" bsStyle="success" bsSize="large"  disabled={pristine || submitting} onClick={ () => this.getFormData() }>
+                                <Button type="button" className="pull-right" bsStyle="success" bsSize="large"  disabled={pristine || submitting} onClick={ () => this.NEW_DONAR_REGISTERED_DATA() }>
                                     Register
                                 </Button>
                             </Col>
@@ -100,16 +103,28 @@ class RegistrationForm extends Component {
             </div>
         )
     }
-    getFormData(){
-        console.log(this.props);
-    }
+
 }
 
+RegistrationForm.defaultProps ={
+    fields : {
+        firstName:'sairaj',
+        lastName: 'kotagiri',
+        e_email: 'sai@gmail.com',
+        p_email: 'sairaj@gmail.com',
+        dob: '02/03/1994',
+        p_phone:'9063430449',
+        e_phone:'8142428301',
+        occupation:'employee',
+        martial_status:'Married'
+    }
+}
  RegistrationForm.propTypes = {
-    fields: PropTypes.array.isRequired,
+    fields: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired
  }
+
 /*
  <Navbar inverse collapseOnSelect>
  <Navbar.Header>

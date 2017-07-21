@@ -3,13 +3,19 @@
  */
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form';
+import { LinkContainer } from 'react-router-bootstrap'
+import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import {Nav,Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
+import {Nav,Navbar, NavItem, NavDropdown, MenuItem, Grid, Row, Col} from 'react-bootstrap'
 
 
 @autobind
 class Header extends Component {
+    constructor(props){
+        super(props)
+    }
     render() {
+        let { dispatch} = this.props
         return (
             <div>
                 <Navbar inverse collapseOnSelect>
@@ -25,16 +31,17 @@ class Header extends Component {
                                 <NavItem>Register</NavItem>
                             </LinkContainer>
                         </Nav>
-                        <Nav pullRight>
-                            <NavItem eventKey={1} href="#">Link Right</NavItem>
-                            <NavItem eventKey={2} href="#">Link Right</NavItem>
-                        </Nav>
+                        {/*<Nav pullRight>
+                            <NavDropdown  title="Hi SaiRaj" id="basic-nav-dropdown">
+                                <MenuItem>LogOut</MenuItem>
+                            </NavDropdown>
+                        </Nav>*/}
                     </Navbar.Collapse>
                 </Navbar>
                 <Grid>
                     <Row className="show-grid">
-                        <Col md={6}>
-
+                        <Col md={10}>
+                            {this.props.children}
                             </Col>
                     </Row>
                 </Grid>
@@ -43,6 +50,21 @@ class Header extends Component {
     }
 
 }
+
+Header.propTypes = {
+    dispatch: PropTypes.func,
+    children: PropTypes.object
+}
+Header.defaultProps={
+    dispatch :  () => {}
+}
+function selectProps (state) {
+    console.log(state)
+    return {
+    }
+}
+
+export default connect(selectProps) (Header)
 
 /*
 
