@@ -6,18 +6,22 @@ import { reduxForm } from 'redux-form';
 import autobind from 'autobind-decorator'
 import { Grid, Row, Col ,Panel ,Form ,FormGroup,ControlLabel,Button,FormControl,Radio,Checkbox } from 'react-bootstrap'
 import {Nav,Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
-import { NEW_DONAR_REGISTERED_DATA } from '../actions/actions'
+import { NEW_DONAR_REGISTERED_DATA, SEARCH_DATA } from '../actions/actions'
 
-export const fields=[ 'firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone']
+export const fields=[ 'Id','firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone','bloodGroup','city']
 
 @autobind
 class RegistrationForm extends Component {
+
     NEW_DONAR_REGISTERED_DATA(){
         let { dispatch } =this.props
+        console.log('=====================')
+        console.log(this.props.values)
         dispatch(NEW_DONAR_REGISTERED_DATA(this.props.values))
+        dispatch(SEARCH_DATA(this.props.values))
     }
     render() {
-        const { fields: { firstName, lastName, occupation, martial_status, dob, p_email, p_phone, e_email, e_phone },
+        const { fields: { firstName, lastName, occupation, martial_status, dob, p_email, p_phone, e_email, e_phone, bloodGroup, city },
             submitting,
             pristine, reset
         } = this.props;
@@ -58,6 +62,18 @@ class RegistrationForm extends Component {
                                 <Col componentClass={ControlLabel} sm={2}>Date Of Birth</Col>
                                 <Col sm={10}>
                                     <FormControl type="date" placeholder="DOB" {...dob}/>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup controlId="bloodGroup">
+                                <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
+                                <Col sm={10}>
+                                    <FormControl type="text" placeholder="bloodGroup" {...bloodGroup}/>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup controlId="city">
+                                <Col componentClass={ControlLabel} sm={2}>City</Col>
+                                <Col sm={10}>
+                                    <FormControl type="text" placeholder="city" {...city}/>
                                 </Col>
                             </FormGroup>
                         </Panel>
@@ -106,52 +122,11 @@ class RegistrationForm extends Component {
 
 }
 
-RegistrationForm.defaultProps ={
-    fields : {
-        firstName:'sairaj',
-        lastName: 'kotagiri',
-        e_email: 'sai@gmail.com',
-        p_email: 'sairaj@gmail.com',
-        dob: '02/03/1994',
-        p_phone:'9063430449',
-        e_phone:'8142428301',
-        occupation:'employee',
-        martial_status:'Married'
-    }
-}
- RegistrationForm.propTypes = {
-    fields: PropTypes.object.isRequired,
+RegistrationForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired
  }
 
-/*
- <Navbar inverse collapseOnSelect>
- <Navbar.Header>
- <Navbar.Brand>
- <a >DashBoard</a>
- </Navbar.Brand>
- <Navbar.Toggle />
- </Navbar.Header>
- <Navbar.Collapse>
- <Nav>
- <NavItem eventKey={1} href="#">Link</NavItem>
- <NavItem eventKey={2} href="#">Link</NavItem>
- <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
- <MenuItem eventKey={3.1}>Action</MenuItem>
- <MenuItem eventKey={3.2}>Another action</MenuItem>
- <MenuItem eventKey={3.3}>Something else here</MenuItem>
- <MenuItem divider />
- <MenuItem eventKey={3.3}>Separated link</MenuItem>
- </NavDropdown>
- </Nav>
- <Nav pullRight>
- <NavItem eventKey={1} href="#">Link Right</NavItem>
- <NavItem eventKey={2} href="#">Link Right</NavItem>
- </Nav>
- </Navbar.Collapse>
- </Navbar>
- */
 export default reduxForm({
     form: 'RegistrationForm',
     fields,

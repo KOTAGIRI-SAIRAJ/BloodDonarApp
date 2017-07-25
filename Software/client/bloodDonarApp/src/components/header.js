@@ -6,8 +6,7 @@ import { reduxForm } from 'redux-form';
 import { LinkContainer } from 'react-router-bootstrap'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
-import {Nav,Navbar, NavItem, NavDropdown, MenuItem, Grid, Row, Col} from 'react-bootstrap'
-
+import {Nav, Navbar, NavItem, NavDropdown, MenuItem, Grid, Row, Col} from 'react-bootstrap'
 
 @autobind
 class Header extends Component {
@@ -27,20 +26,25 @@ class Header extends Component {
                     </Navbar.Header>
                     <Navbar.Collapse>
                         <Nav>
-                            <LinkContainer to='/' >
-                                <NavItem>Register</NavItem>
+                            <LinkContainer to='/'>
+                                <NavItem eventKey={1} href="#">HomePage</NavItem>
                             </LinkContainer>
                         </Nav>
-                        {/*<Nav pullRight>
-                            <NavDropdown  title="Hi SaiRaj" id="basic-nav-dropdown">
-                                <MenuItem>LogOut</MenuItem>
-                            </NavDropdown>
-                        </Nav>*/}
+                        <Nav>
+                            <LinkContainer to='/register'>
+                                <NavItem eventKey={2} href="#">Register</NavItem>
+                            </LinkContainer>
+                        </Nav>
+                        <Nav>
+                            <LinkContainer to='/search'>
+                                <NavItem eventKey={2} href="#">Search</NavItem>
+                            </LinkContainer>
+                        </Nav>
                     </Navbar.Collapse>
                 </Navbar>
                 <Grid>
                     <Row className="show-grid">
-                        <Col md={10}>
+                        <Col md={10} mdPush={1}>
                             {this.props.children}
                             </Col>
                     </Row>

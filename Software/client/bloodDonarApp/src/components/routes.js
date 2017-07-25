@@ -5,11 +5,15 @@ import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 import Header  from '../components/header'
 import RegistrationForm from '../components/registrarionDonar'
+import Search from '../components/Search'
+import Homepage from '../components/homepage'
 
 const routes = (
     <Route>
         <Route path="/" component={ Header }>
-            <IndexRoute component={ RegistrationForm } ></IndexRoute>
+            <IndexRoute component={ Homepage } ></IndexRoute>
+                <Route path ="register" component={RegistrationForm}></Route>
+                <Route path ="search" component={Search}></Route>
         </Route>
     </Route>
 )
