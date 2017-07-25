@@ -15,8 +15,6 @@ class RegistrationForm extends Component {
 
     NEW_DONAR_REGISTERED_DATA(){
         let { dispatch } =this.props
-        console.log('=====================')
-        console.log(this.props.values)
         dispatch(NEW_DONAR_REGISTERED_DATA(this.props.values))
         dispatch(SEARCH_DATA(this.props.values))
     }

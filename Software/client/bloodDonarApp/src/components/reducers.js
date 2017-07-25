@@ -27,11 +27,18 @@ const  search_data=handleActions({
         return search_data ;
     },
     SEARCH_DATAA: (state = [], action) => {
-        let search_dataa = null;
-        search_dataa =action.payload;
-        return search_dataa ;
+        let search_data = null;
+        search_data =action.payload;
+        return search_data ;
     }
 },[])
-const allReducers=combineReducers({donars_data:donars_data,search_data:search_data,
+const boolean_popups =handleActions({
+    BOOLEAN_POPUPS: (state = [], action) => {
+        let boolean_popups = null;
+        boolean_popups = [state, addDonor(action)]
+        return boolean_popups;
+    }
+},[])
+const allReducers=combineReducers({donars_data:donars_data,search_data:search_data,boolean_popups:boolean_popups,
     form : formReducer});
 export default allReducers
