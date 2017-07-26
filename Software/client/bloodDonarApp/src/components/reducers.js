@@ -39,6 +39,29 @@ const boolean_popups =handleActions({
         return boolean_popups;
     }
 },[])
-const allReducers=combineReducers({donars_data:donars_data,search_data:search_data,boolean_popups:boolean_popups,
+
+const user_request_data =handleActions({
+    USER_REQUEST_DATA: (state = [], action) => {
+        let user_request_data= null;
+        user_request_data = [...state, addDonor(action)]
+        return user_request_data;
+    },
+
+},[])
+
+const popup_check_booleanValue =handleActions({
+    POPUP_CHECK_BOOLEANVALUE: (state = [], action) => {
+        let popup_check_booleanValue= null;
+        popup_check_booleanValue = action.payload
+        return popup_check_booleanValue;
+    },
+},[])
+
+const allReducers=combineReducers({
+    donars_data:donars_data,
+    search_data:search_data,
+    boolean_popups:boolean_popups,
+    user_request_data:user_request_data,
+    popup_check_booleanValue:popup_check_booleanValue,
     form : formReducer});
 export default allReducers

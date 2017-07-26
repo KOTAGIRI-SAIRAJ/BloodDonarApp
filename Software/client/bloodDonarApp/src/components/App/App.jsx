@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute, hashHistory } from 'react-router'
 import routes from '../../components/routes'
 import autobind from 'autobind-decorator'
+import { POPUP_CHECK_BOOLEANVALUE } from '../.././actions/actions'
 
 
 
@@ -18,6 +19,9 @@ export default class App extends Component {
      * see: https://facebook.github.io/react/docs/reusable-components.html#es6-classes
      */
     render() {
+        /*let { dispatch } = this.props
+        let boolval = false;
+        dispatch(POPUP_CHECK_BOOLEANVALUE(boolval));*/
         return (
             <div>
                 <Jumbotron>

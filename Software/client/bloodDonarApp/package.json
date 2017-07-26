@@ -36,7 +36,8 @@
     "redux-form": "^4.2.2",
     "redux-form-website-template": "0.0.45",
     "redux-logger": "^2.10.2",
-    "redux-thunk": "^1.0.3"
+    "redux-thunk": "^1.0.3",
+    "lodash": "^4.6.1"
   },
   "license": "MIT",
   "devDependencies": {

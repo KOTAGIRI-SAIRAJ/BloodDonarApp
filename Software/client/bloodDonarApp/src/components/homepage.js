@@ -5,8 +5,13 @@ import React, { Component } from 'react'
 import autobind from 'autobind-decorator'
 import { Image ,Carousel} from 'react-bootstrap'
 
+
 export default class Homepage extends Component{
+    constructor(props){
+        super(props)
+    }
     render(){
+
         return(
             <Carousel>
                 <Carousel.Item>

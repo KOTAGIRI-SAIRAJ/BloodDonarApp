@@ -7,6 +7,8 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import {Nav, Navbar, NavItem, NavDropdown, MenuItem, Grid, Row, Col} from 'react-bootstrap'
+import { POPUP_CHECK_BOOLEANVALUE } from '../actions/actions'
+
 
 @autobind
 class Header extends Component {
@@ -14,7 +16,9 @@ class Header extends Component {
         super(props)
     }
     render() {
-        let { dispatch} = this.props
+        let { dispatch } =this.props
+        let boolval = false;
+        dispatch(POPUP_CHECK_BOOLEANVALUE(boolval));
         return (
             <div>
                 <Navbar inverse collapseOnSelect>

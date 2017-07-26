@@ -28,25 +28,37 @@ class RegistrationForm extends Component {
                 <Panel header="Registration Page" bsStyle="primary">
                     <Form horizontal >
                         <Panel header="Personal Details"  bsStyle="success">
-                            <FormGroup controlId="firstName">
+                            <FormGroup >
                                 <Col componentClass={ControlLabel} sm={2}>First Name</Col>
-                                <Col sm={10}>
+                                <Col sm={4}>
                                     <FormControl type="text" placeholder="First Name" {...firstName}/>
                                 </Col>
-                            </FormGroup>
-                            <FormGroup controlId="lastName">
                                 <Col componentClass={ControlLabel} sm={2}>Last Name</Col>
-                                <Col sm={10}>
+                                <Col sm={4}>
                                     <FormControl type="text" placeholder="Last Name" {...lastName}/>
                                 </Col>
                             </FormGroup>
-                            <FormGroup controlId="occupation">
+                            <FormGroup >
                                 <Col componentClass={ControlLabel} sm={2}>Occupation</Col>
-                                <Col sm={10}>
+                                <Col sm={4}>
                                     <FormControl type="text" placeholder="Occupation" {...occupation}/>
                                 </Col>
+                                <Col componentClass={ControlLabel} sm={2}>Date Of Birth</Col>
+                                <Col sm={4}>
+                                    <FormControl type="date" placeholder="DOB" {...dob}/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup controlId="martial_status">
+                            <FormGroup >
+                                <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
+                                <Col sm={4}>
+                                    <FormControl type="text" placeholder="bloodGroup" {...bloodGroup}/>
+                                </Col>
+                                <Col componentClass={ControlLabel} sm={2}>City</Col>
+                                <Col sm={4}>
+                                    <FormControl type="text" placeholder="city" {...city}/>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup >
                                 <Col componentClass={ControlLabel} sm={2}>Martial Status</Col>
                                 <Radio name="radioGroup" inline {...martial_status } value="Married" checked={martial_status.value === 'Married'}>
                                     Married
@@ -56,26 +68,11 @@ class RegistrationForm extends Component {
                                     Unmarried
                                 </Radio>
                             </FormGroup>
-                            <FormGroup controlId="dob">
-                                <Col componentClass={ControlLabel} sm={2}>Date Of Birth</Col>
-                                <Col sm={10}>
-                                    <FormControl type="date" placeholder="DOB" {...dob}/>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup controlId="bloodGroup">
-                                <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
-                                <Col sm={10}>
-                                    <FormControl type="text" placeholder="bloodGroup" {...bloodGroup}/>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup controlId="city">
-                                <Col componentClass={ControlLabel} sm={2}>City</Col>
-                                <Col sm={10}>
-                                    <FormControl type="text" placeholder="city" {...city}/>
-                                </Col>
-                            </FormGroup>
+
                         </Panel>
+
                         <Panel header="Contact details"  bsStyle="info">
+                            <Col sm={6}>
                             <Panel header="Personal contact details"  bsStyle="warning">
                                 <FormGroup controlId="p_email">
                                     <Col componentClass={ControlLabel} sm={2}>Email</Col>
@@ -90,6 +87,8 @@ class RegistrationForm extends Component {
                                     </Col>
                                 </FormGroup>
                             </Panel>
+                            </Col>
+                            <Col sm={6}>
                             <Panel header="Emergency contact details"  bsStyle="danger">
                                 <FormGroup controlId="e_email">
                                     <Col componentClass={ControlLabel} sm={2}>Email</Col>
@@ -104,6 +103,7 @@ class RegistrationForm extends Component {
                                     </Col>
                                 </FormGroup>
                             </Panel>
+                            </Col>
                         </Panel>
                         <FormGroup>
                             <Col smOffset={2} sm={10}>
