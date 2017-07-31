@@ -9,8 +9,12 @@ import { POPUP_CHECK_BOOLEANVALUE } from '../.././actions/actions'
 import { Grid, Row, Col, Panel} from 'react-bootstrap'
 import RegistrationForm from '../registrarionDonar'
 import SignupPage from './signup'
+import moment from 'moment'
+import momentLocalizer from 'react-widgets/lib/localizers/moment'
 
 import {Nav,Navbar, NavItem, NavDropdown, MenuItem, Jumbotron} from 'react-bootstrap'
+
+momentLocalizer(moment)
 
 @autobind
 export default class App extends Component {

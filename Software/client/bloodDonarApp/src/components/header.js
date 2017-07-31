@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import autobind from 'autobind-decorator'
 import {Nav, Navbar, NavItem, NavDropdown, MenuItem, Grid, Row, Col} from 'react-bootstrap'
 import { POPUP_CHECK_BOOLEANVALUE } from '../actions/actions'
+import { COMMENT_BOOLEAN_CHECK, RECENT_DONAR } from '../actions/actions'
 
 
 @autobind
@@ -18,7 +19,11 @@ class Header extends Component {
     render() {
         let { dispatch } =this.props
         let boolval = false;
+        let temp = false;
         dispatch(POPUP_CHECK_BOOLEANVALUE(boolval));
+        dispatch(COMMENT_BOOLEAN_CHECK(boolval));
+        dispatch(RECENT_DONAR(temp));
+
         return (
             <div>
                 <Navbar inverse collapseOnSelect>

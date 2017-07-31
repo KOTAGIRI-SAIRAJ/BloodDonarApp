@@ -4,21 +4,51 @@
 import React, { Component, PropTypes } from 'react'
 import { reduxForm } from 'redux-form';
 import autobind from 'autobind-decorator'
+import { push } from 'react-router-redux'
+import { DateTimePicker, Calendar } from 'react-widgets'
+import moment from 'moment'
 import { Grid, Row, Col ,Panel ,Form ,FormGroup,ControlLabel,Button,FormControl,Radio,Checkbox } from 'react-bootstrap'
 import {Nav,Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
 import { NEW_DONAR_REGISTERED_DATA, SEARCH_DATA } from '../actions/actions'
 
-export const fields=[ 'Id','firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone','bloodGroup','city']
+
+
+export const fields=[ 'Id','firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone','bloodGroup','city','recent_donar']
+
+
 
 @autobind
 class RegistrationForm extends Component {
 
     NEW_DONAR_REGISTERED_DATA(){
+        let id= new Date();
         let { dispatch } =this.props
+        this.props.values.recent_donar = 'NO'
+        this.props.values.Id = id.toDateString()+' '+id.toLocaleTimeString();
         dispatch(NEW_DONAR_REGISTERED_DATA(this.props.values))
         dispatch(SEARCH_DATA(this.props.values))
+        this.props.dispatch(push('/search'))
+    }
+
+    handleStartDate(value) {
+        this.handleChange( 'checkInDate', value )
+        console.log('handleStartDate');
+        console.log('handleStartDate');
+        console.log('handleStartDate');
+    }
+    handleChange (field, value) {
+        console.log("-----------------");
+        console.log(field);
+        console.log(value);
+        console.log("-----------------");
     }
     render() {
+        let { checkInDate, checkOutDate } = this.props
+        let datePickerAttrs = {
+            defaultValue: null,
+            time: true,
+            style: { width: '100%' }
+        }
         const { fields: { firstName, lastName, occupation, martial_status, dob, p_email, p_phone, e_email, e_phone, bloodGroup, city },
             submitting,
             pristine, reset
@@ -48,14 +78,18 @@ class RegistrationForm extends Component {
                                     <FormControl type="date" placeholder="DOB" {...dob}/>
                                 </Col>
                             </FormGroup>
-                            <FormGroup >
+                            <FormGroup>
+                                <Calendar value={checkInDate} placeholder='Check in date'
+                                          onChange={(value) => this.handleStartDate( value )} ></Calendar>
+                            </FormGroup>
+                            <FormGroup>
                                 <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
                                 <Col sm={4}>
-                                    <FormControl type="text" placeholder="bloodGroup" {...bloodGroup}/>
+                                    <FormControl type="text" placeholder="Blood Group" {...bloodGroup}/>
                                 </Col>
                                 <Col componentClass={ControlLabel} sm={2}>City</Col>
                                 <Col sm={4}>
-                                    <FormControl type="text" placeholder="city" {...city}/>
+                                    <FormControl type="text" placeholder="City" {...city}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup >
@@ -68,41 +102,40 @@ class RegistrationForm extends Component {
                                     Unmarried
                                 </Radio>
                             </FormGroup>
-
                         </Panel>
 
                         <Panel header="Contact details"  bsStyle="info">
                             <Col sm={6}>
-                            <Panel header="Personal contact details"  bsStyle="warning">
-                                <FormGroup controlId="p_email">
-                                    <Col componentClass={ControlLabel} sm={2}>Email</Col>
-                                    <Col sm={10}>
-                                        <FormControl type="email" placeholder="Enter the Email-Id" {...p_email}/>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="p_phone">
-                                    <Col componentClass={ControlLabel} sm={2}>Mobile Number</Col>
-                                    <Col sm={10}>
-                                        <FormControl type="number" placeholder="Mobile Number" {...p_phone}/>
-                                    </Col>
-                                </FormGroup>
-                            </Panel>
+                                <Panel header="Personal contact details"  bsStyle="warning">
+                                    <FormGroup controlId="p_email">
+                                        <Col componentClass={ControlLabel} sm={2}>Email</Col>
+                                        <Col sm={10}>
+                                            <FormControl type="email" placeholder="Enter the Email-Id" {...p_email}/>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="p_phone">
+                                        <Col componentClass={ControlLabel} sm={2}>Mobile Number</Col>
+                                        <Col sm={10}>
+                                            <FormControl type="number" placeholder="Mobile Number" {...p_phone}/>
+                                        </Col>
+                                    </FormGroup>
+                                </Panel>
                             </Col>
                             <Col sm={6}>
-                            <Panel header="Emergency contact details"  bsStyle="danger">
-                                <FormGroup controlId="e_email">
-                                    <Col componentClass={ControlLabel} sm={2}>Email</Col>
-                                    <Col sm={10}>
-                                        <FormControl type="email" placeholder="Enter the Email-Id" {...e_email}/>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup controlId="e_phone">
-                                    <Col componentClass={ControlLabel} sm={2}>Mobile Number</Col>
-                                    <Col sm={10}>
-                                        <FormControl type="number" placeholder="Mobile Number" {...e_phone}/>
-                                    </Col>
-                                </FormGroup>
-                            </Panel>
+                                <Panel header="Emergency contact details"  bsStyle="danger">
+                                    <FormGroup controlId="e_email">
+                                        <Col componentClass={ControlLabel} sm={2}>Email</Col>
+                                        <Col sm={10}>
+                                            <FormControl type="email" placeholder="Enter the Email-Id" {...e_email}/>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup controlId="e_phone">
+                                        <Col componentClass={ControlLabel} sm={2}>Mobile Number</Col>
+                                        <Col sm={10}>
+                                            <FormControl type="number" placeholder="Mobile Number" {...e_phone}/>
+                                        </Col>
+                                    </FormGroup>
+                                </Panel>
                             </Col>
                         </Panel>
                         <FormGroup>
@@ -117,13 +150,12 @@ class RegistrationForm extends Component {
             </div>
         )
     }
-
 }
 
 RegistrationForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired
- }
+}
 
 export default reduxForm({
     form: 'RegistrationForm',
