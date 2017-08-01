@@ -13,7 +13,7 @@ import { NEW_DONAR_REGISTERED_DATA, SEARCH_DATA } from '../actions/actions'
 
 
 
-export const fields=[ 'Id','firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone','bloodGroup','city','recent_donar']
+export const fields=[ 'Id','firstName', 'lastName', 'occupation','martial_status','dob','p_email','p_phone','e_email','e_phone','bloodGroup','city','recent_donar','current_date','end_date']
 
 
 
@@ -24,7 +24,37 @@ class RegistrationForm extends Component {
         let id= new Date();
         let { dispatch } =this.props
         this.props.values.recent_donar = 'NO'
-        this.props.values.Id = id.toDateString()+' '+id.toLocaleTimeString();
+        this.props.values.Id = moment().format();
+        localStorage.setItem('allProjectDetails',JSON.stringify(this.props.values));
+        let d = JSON.parse(localStorage.getItem('allProjectDetails'));
+        console.log(d)
+        /*this.props.values.current_date  = moment(this.props.values.Id ,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        let newCurrentDate = moment(this.props.values.Id).add(50, 'seconds')
+        this.props.values.end_date= moment(newCurrentDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')*/
+        /*console.log("PPPPPPPPPPPPPPPPPPPP");
+        let CurrentDate = moment().format();
+        let newCurrentDate = moment(CurrentDate).add(90, 'days')
+        let tempcurr= moment(CurrentDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        let newtempcurr= moment(newCurrentDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        console.log(tempcurr);
+        console.log(newtempcurr);
+        let tempCurrentDate = moment(CurrentDate).add(10, 'days');
+        tempCurrentDate = moment(tempCurrentDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        console.log(tempCurrentDate);
+        let tempsubdate = moment(tempCurrentDate).subtract(newtempcurr);
+        if(tempCurrentDate === tempCurrentDate){
+            console.log(tempCurrentDate > tempCurrentDate)
+            console.log(tempCurrentDate!==tempCurrentDate)
+            console.log('equal');
+        }
+        if(tempCurrentDate !== newtempcurr){
+            console.log(tempCurrentDate > newtempcurr)
+            console.log(tempCurrentDate < newtempcurr)
+            console.log("not equal");
+        }
+        console.log((newtempcurr > tempCurrentDate ) && (tempCurrentDate === tempCurrentDate))
+        console.log(tempsubdate);
+        console.log("PPPPPPPPPPPPPPPPPPPP");*/
         dispatch(NEW_DONAR_REGISTERED_DATA(this.props.values))
         dispatch(SEARCH_DATA(this.props.values))
         this.props.dispatch(push('/search'))
@@ -49,10 +79,14 @@ class RegistrationForm extends Component {
             time: true,
             style: { width: '100%' }
         }
-        const { fields: { firstName, lastName, occupation, martial_status, dob, p_email, p_phone, e_email, e_phone, bloodGroup, city },
+        const { fields: { firstName, lastName, occupation, martial_status, dob, p_email, p_phone, e_email, e_phone, bloodGroup, city, current_date ,end_date },
             submitting,
             pristine, reset
         } = this.props;
+        let d = JSON.parse(localStorage.getItem('allProjectDetails'));
+        console.log("-----------------------------")
+        console.log(d)
+        console.log("-----------------------------")
         return (
             <div>
                 <Panel header="Registration Page" bsStyle="primary">
@@ -78,10 +112,10 @@ class RegistrationForm extends Component {
                                     <FormControl type="date" placeholder="DOB" {...dob}/>
                                 </Col>
                             </FormGroup>
-                            <FormGroup>
+                            {/*<FormGroup>
                                 <Calendar value={checkInDate} placeholder='Check in date'
                                           onChange={(value) => this.handleStartDate( value )} ></Calendar>
-                            </FormGroup>
+                            </FormGroup>*/}
                             <FormGroup>
                                 <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
                                 <Col sm={4}>
@@ -157,7 +191,15 @@ RegistrationForm.propTypes = {
     submitting: PropTypes.bool.isRequired
 }
 
+function getInitFields() {
+    let initValues = JSON.parse(localStorage.getItem('allProjectDetails'));
+    return initValues
+}
+
 export default reduxForm({
     form: 'RegistrationForm',
+    initialValues : getInitFields(),
     fields,
 })(RegistrationForm)
+
+

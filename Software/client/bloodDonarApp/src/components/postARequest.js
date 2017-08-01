@@ -6,6 +6,7 @@ import {reduxForm} from "redux-form";
 import {Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Panel, Row,Modal} from "react-bootstrap";
 import autobind from "autobind-decorator";
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import moment from 'moment'
 import { USER_REQUEST_DATA,POPUP_CHECK_BOOLEANVALUE } from '../actions/actions'
 
 
@@ -16,7 +17,7 @@ class PostARequest extends Component {
     User_Data(){
         let id= new Date();
         let { dispatch } =this.props
-        this.props.values.u_id = id.toDateString()+' '+id.toLocaleTimeString();
+        this.props.values.u_id = moment().format();
         dispatch(USER_REQUEST_DATA(this.props.values))
         let boolval = false;
         dispatch(POPUP_CHECK_BOOLEANVALUE(boolval));

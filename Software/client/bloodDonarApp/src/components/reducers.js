@@ -23,9 +23,8 @@ const donars_data =handleActions({
         donars_data = action.payload
         return donars_data;
     }
-
-
 },[])
+
 const  search_data=handleActions({
     SEARCH_DATA: (state = [], action) => {
         let search_data = null;
@@ -38,6 +37,7 @@ const  search_data=handleActions({
         return search_data ;
     }
 },[])
+
 const boolean_popups =handleActions({
     BOOLEAN_POPUPS: (state = [], action) => {
         let boolean_popups = null;
@@ -103,8 +103,6 @@ const recent_donar_status =handleActions({
     },
 },[])
 
-
-
 const allReducers=combineReducers({
     donars_data:donars_data,
     search_data:search_data,
@@ -117,4 +115,5 @@ const allReducers=combineReducers({
     recent_donar_status:recent_donar_status,
     temp_uid:temp_uid,
     form : formReducer});
+
 export default allReducers

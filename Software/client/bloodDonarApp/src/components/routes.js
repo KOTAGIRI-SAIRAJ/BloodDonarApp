@@ -7,6 +7,8 @@ import Header  from '../components/header'
 import RegistrationForm from '../components/registrarionDonar'
 import Search from '../components/Search'
 import Homepage from '../components/homepage'
+import { browserHistory } from 'react-router'
+
 
 const routes = (
     <Route>

@@ -13,6 +13,7 @@ import { USER_REQUEST_DATA } from '../actions/actions'
 import { POPUP_CHECK_BOOLEANVALUE } from '../actions/actions'
 import { COMMENT_BOOLEAN_CHECK, TEMP_UID, TOTAL_COMMENTS,RECENT_DONAR,UPDATE_DONAR_REGISTERED_DATA } from '../actions/actions'
 import ReactDOM from 'react-dom'
+import moment from 'moment'
 import PostARequest from './postARequest'
 import CommentsPopup from './CommentsPopup'
 
@@ -29,7 +30,9 @@ class Search extends Component {
         let tempArr =[];
         let { dispatch } =this.props
         total_Donars_data.forEach((eachRecord)=>{
-            if(eachRecord.bloodGroup === searchVal.bloodGroup && eachRecord.city === searchVal.city && eachRecord.recent_donar === 'NO'){
+            let tempCurrDate = moment().format();
+            tempCurrDate= moment(tempCurrDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+            if(eachRecord.bloodGroup === searchVal.bloodGroup && eachRecord.city === searchVal.city && eachRecord.recent_donar === 'NO' && ( (eachRecord.end_date === tempCurrDate) || (tempCurrDate > eachRecord.end_date) ) ){
                 tempArr.push(eachRecord);
             }
         })
@@ -39,8 +42,14 @@ class Search extends Component {
     SEARCH_DATA_WITHOUT_RECENTDONARS(){
         let tempArr =[];
         let { dispatch } =this.props
+        let tempCurrDate = moment().format();
+        tempCurrDate= moment(tempCurrDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+        console.log( "from Seearch" );
         total_Donars_data.forEach((eachRecord)=>{
-            if(eachRecord.recent_donar === 'NO'){
+            if((eachRecord.end_date === tempCurrDate) || (tempCurrDate > eachRecord.end_date) ){
+                eachRecord.recent_donar = 'NO'
+            }
+            if(eachRecord.recent_donar === 'NO' ){
                 tempArr.push(eachRecord);
             }
         })
@@ -50,7 +59,15 @@ class Search extends Component {
     rowClick(row) {
         boolean_Status = {show : true}
         let { dispatch } =this.props
+        if(row.recent_donar === 'NO'){
+            let bo = false
+            dispatch(RECENT_DONAR(bo))
+        }else{
+            let bo = true
+            dispatch(RECENT_DONAR(bo))
+        }
         dispatch(BOOLEAN_POPUPS(row));
+        this.SEARCH_DATA_WITHOUT_RECENTDONARS();
     }
 
     newrowClick(row){
@@ -59,6 +76,7 @@ class Search extends Component {
         let bool = true;
         dispatch(TEMP_UID(row.u_id));
         dispatch(COMMENT_BOOLEAN_CHECK(bool));
+        this.SEARCH_DATA_WITHOUT_RECENTDONARS();
     }
 
     onCloseClick(){
@@ -73,30 +91,33 @@ class Search extends Component {
         let { dispatch } =this.props
         let boolval = true;
         dispatch(POPUP_CHECK_BOOLEANVALUE(boolval));
+        this.SEARCH_DATA_WITHOUT_RECENTDONARS()
     }
 
     onClosePostRequestClick(){
         let { dispatch } =this.props
         let boolval = false;
         dispatch(POPUP_CHECK_BOOLEANVALUE(boolval));
+        this.SEARCH_DATA_WITHOUT_RECENTDONARS()
     }
 
     onCloseCommentClick(){
         let { dispatch } =this.props
         let bool = false;
         dispatch(COMMENT_BOOLEAN_CHECK(bool));
+        this.SEARCH_DATA_WITHOUT_RECENTDONARS();
     }
 
     onChangeCallMethod(){
-
         let tempTotalRegisterdDonars = this.props.TotalRegisterdDonars;
         let tempPersonalSearchData = this.props.PersonalSearchData[1];
-        console.log('clicked');
         let { dispatch } =this.props
         if(this.props.recentDonarStatus) {
             let bool = false;
             tempTotalRegisterdDonars.forEach((eachRecord)=>{
                 if(eachRecord.Id === tempPersonalSearchData .Id){
+                    eachRecord.current_date = undefined;
+                    eachRecord.end_date = undefined;
                     eachRecord.recent_donar = "NO";
                 }
             })
@@ -106,14 +127,16 @@ class Search extends Component {
             let bool = true;
             tempTotalRegisterdDonars.forEach((eachRecord)=>{
                 if(eachRecord.Id === tempPersonalSearchData .Id){
+                    let tempCurrDate = moment().format();
+                    eachRecord.current_date  = moment(tempCurrDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
+                    let newCurrentDate = moment(eachRecord.current_date).add(50, 'seconds')
+                    eachRecord.end_date= moment(newCurrentDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
                     eachRecord.recent_donar = "YES";
                 }
             })
-            console.log(tempTotalRegisterdDonars);
             dispatch(UPDATE_DONAR_REGISTERED_DATA(tempTotalRegisterdDonars))
             dispatch(RECENT_DONAR(bool));
         }
-
     }
 
     render() {
@@ -153,7 +176,14 @@ class Search extends Component {
          paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
          paginationPosition: 'top' , // default is bottom, top and both is all available*/
         var options = {
-
+            sizePerPage: 5,
+            sizePerPageList: [ {
+                text: '5', value: 5
+            }, {
+                text: '10', value: 10
+            }, {
+                text: 'All', value: SearchData.length
+            } ],
             onRowClick: this.rowClick.bind(this)
         }
         let storeComments;
@@ -175,7 +205,7 @@ class Search extends Component {
                 <Nav bsStyle="pills" stacked activeKey={1} >
                     <NavItem eventKey={1} href="/home">Request Posted By {name.u_emial}</NavItem>
                     <p>Requested for the Blood Group <strong>{name.u_bloodGroup}</strong></p>
-                    <p> Contact <strong>+91-{name.u_phone}</strong></p>\
+                    <p> Contact <strong>+91-{name.u_phone}</strong></p>
 
                     <br />
                     { commentForAPerson(name.u_id) }
@@ -211,7 +241,6 @@ class Search extends Component {
                                 <FormControl type="text" placeholder="City" {...city}/>
                             </Col>
                         </FormGroup>
-
                         <FormGroup>
                             <Col smOffset={2} sm={9}>
                                 <Button type="button" className="pull-right" bsStyle="success" bsSize="large" onClick={ () => this.SEARCH_DATA() } >
@@ -222,7 +251,10 @@ class Search extends Component {
 
                     </Panel>
                     <FormGroup>
-                        <BootstrapTable data={SearchData} pagination={true} options={options} striped hover >
+                        <BootstrapTable data={SearchData} pagination options={options} striped hover
+                                        condensed
+                                        search
+                        >
                             <TableHeaderColumn isKey dataField='firstName'>First Name</TableHeaderColumn>
                             <TableHeaderColumn dataField='lastName'>Last Name</TableHeaderColumn>
                             <TableHeaderColumn dataField='occupation'>Occupation</TableHeaderColumn>
@@ -243,16 +275,16 @@ class Search extends Component {
                         </Modal.Header>
                         <Modal.Body>
                             <div>
-                            <BootstrapTable data={PersonalSearchData} striped hover>
-                                <TableHeaderColumn isKey dataField='p_email'>Personal Email</TableHeaderColumn>
-                                <TableHeaderColumn dataField='p_phone'>Personal Contact</TableHeaderColumn>
-                                <TableHeaderColumn dataField='e_email'>Emergency Email</TableHeaderColumn>
-                                <TableHeaderColumn dataField='e_phone'>Emergency Contact</TableHeaderColumn>
-                            </BootstrapTable>
+                                <BootstrapTable data={PersonalSearchData} striped hover>
+                                    <TableHeaderColumn isKey dataField='p_email'>Personal Email</TableHeaderColumn>
+                                    <TableHeaderColumn dataField='p_phone'>Personal Contact</TableHeaderColumn>
+                                    <TableHeaderColumn dataField='e_email'>Emergency Email</TableHeaderColumn>
+                                    <TableHeaderColumn dataField='e_phone'>Emergency Contact</TableHeaderColumn>
+                                </BootstrapTable>
                                 <label>
                                     <input type="checkbox" checked={recentDonarStatus}
                                            onChange={ () => this.onChangeCallMethod()}/>
-                                         Mark as Recent Donar!
+                                    Mark as Recent Donar!
                                 </label>
                             </div>
                         </Modal.Body>
@@ -328,5 +360,5 @@ export default reduxForm({
         form : 'Search',
         fields
     },
-    selectProps
+    selectProps,
 )(Search)
