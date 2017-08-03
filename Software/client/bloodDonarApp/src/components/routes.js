@@ -2,11 +2,12 @@
  * Created by semanticbits on 20/7/17.
  */
 import React from 'react'
-import { Route, IndexRoute } from 'react-router'
+import { Router,Route, IndexRoute } from 'react-router'
 import Header  from '../components/header'
 import RegistrationForm from '../components/registrarionDonar'
 import Search from '../components/Search'
 import Homepage from '../components/homepage'
+import PostARequestN from '../components/postARequestN'
 import { browserHistory } from 'react-router'
 
 
@@ -16,6 +17,7 @@ const routes = (
             <IndexRoute component={ Homepage } ></IndexRoute>
                 <Route path ="register" component={RegistrationForm}></Route>
                 <Route path ="search" component={Search}></Route>
+                <Route path ="postrequest" component={PostARequestN}></Route>
         </Route>
     </Route>
 )

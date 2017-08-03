@@ -34,6 +34,7 @@ class RegisterDonor extends Component {
         this.props.submitFormAction(formProps);
     }
     componentDidMount() {
+        //TODO: remove all console logs
         console.log("componentDidMount")
         console.log(this.props)
         console.log("componentDidMount")

@@ -22,6 +22,11 @@ const donars_data =handleActions({
         let donars_data = null;
         donars_data = action.payload
         return donars_data;
+    },
+    DEFAULT_DONAR_DATA: (state = [], action) => {
+        let donars_data = null;
+        donars_data = action.payload
+        return donars_data;
     }
 },[])
 
@@ -35,13 +40,18 @@ const  search_data=handleActions({
         let search_data = null;
         search_data =action.payload;
         return search_data ;
+    },
+    DEFAULT_SEARCH_DATA: (state = [], action) => {
+        let search_data = null;
+        search_data = action.payload
+        return search_data;
     }
 },[])
 
 const boolean_popups =handleActions({
     BOOLEAN_POPUPS: (state = [], action) => {
         let boolean_popups = null;
-        boolean_popups = [state, addDonor(action)]
+        boolean_popups = action.payload
         return boolean_popups;
     }
 },[])
@@ -103,6 +113,22 @@ const recent_donar_status =handleActions({
     },
 },[])
 
+const post_request_boolean =handleActions({
+    POST_REQUEST_BOOLEAN: (state = [], action) => {
+        let post_request_boolean = null;
+        post_request_boolean = action.payload
+        return post_request_boolean;
+    },
+},[])
+
+const post_request_row_click_record =handleActions({
+    POST_REQUEST_ROW_CLICK_RECORD: (state = [], action) => {
+        let post_request_row_click_record = null;
+        post_request_row_click_record = action.payload
+        return post_request_row_click_record;
+    },
+},[])
+
 const allReducers=combineReducers({
     donars_data:donars_data,
     search_data:search_data,
@@ -113,6 +139,8 @@ const allReducers=combineReducers({
     comment_boolean_check:comment_boolean_check,
     temp_comments:temp_comments,
     recent_donar_status:recent_donar_status,
+    post_request_boolean:post_request_boolean,
+    post_request_row_click_record:post_request_row_click_record,
     temp_uid:temp_uid,
     form : formReducer});
 

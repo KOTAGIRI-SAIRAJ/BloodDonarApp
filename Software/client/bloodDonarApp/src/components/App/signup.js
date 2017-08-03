@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import { Grid, Row, Col ,Panel ,Form ,FormGroup,ControlLabel,Button,FormControl,Radio,Checkbox } from 'react-bootstrap'
-
+//TODO: remove file
 export default class SignupPage extends Component{
     constructor(props){
         super(props);

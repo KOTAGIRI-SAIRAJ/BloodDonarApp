@@ -4,19 +4,18 @@
 
 import React, {Component, PropTypes} from "react";
 import {reduxForm} from "redux-form";
-import {Button, Col, ControlLabel, Form, Checkbox,FormControl, FormGroup, Modal, Nav, NavItem, Panel} from "react-bootstrap";
+import {Checkbox,Nav,NavItem,Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Panel, Row,Modal} from "react-bootstrap";
 import autobind from "autobind-decorator";
-import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
-import {
-    BOOLEAN_POPUPS,
-    COMMENT_BOOLEAN_CHECK,
-    POPUP_CHECK_BOOLEANVALUE,
-    RECENT_DONAR,
-    SEARCH_DATAA,
-    TEMP_UID,
-    UPDATE_DONAR_REGISTERED_DATA
-} from "../actions/actions";
-import moment from "moment";
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import { SEARCH_DATAA } from '../actions/actions'
+import { BOOLEAN_POPUPS } from '../actions/actions'
+import { USER_REQUEST_DATA } from '../actions/actions'
+import { POPUP_CHECK_BOOLEANVALUE } from '../actions/actions'
+import { COMMENT_BOOLEAN_CHECK, TEMP_UID, TOTAL_COMMENTS,RECENT_DONAR,UPDATE_DONAR_REGISTERED_DATA } from '../actions/actions'
+import ReactDOM from 'react-dom'
+import moment from 'moment'
+import PostARequest from './postARequest'
+import CommentsPopup from './CommentsPopup'
 
 
 export const fields=[ 'bloodGroup', 'city']
@@ -34,7 +33,7 @@ class Search extends Component {
             let tempCurrDate = moment().format();
             //TODO: make it globalized...
             tempCurrDate= moment(tempCurrDate,'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss')
-            if(eachRecord.bloodGroup === searchVal.bloodGroup && eachRecord.city === searchVal.city && eachRecord.recent_donar === 'NO'  ){
+            if(eachRecord.bloodGroup === searchVal.bloodGroup && eachRecord.city === searchVal.city && eachRecord.recent_donar === 'NO' && ( (eachRecord.end_date === tempCurrDate) || (tempCurrDate > eachRecord.end_date) ) ){
                 tempArr.push(eachRecord);
             }
         })
@@ -67,13 +66,12 @@ class Search extends Component {
             let bo = true
             dispatch(RECENT_DONAR(bo))
         }
-        let temparr =[]
-        temparr.push(row)
-        dispatch(BOOLEAN_POPUPS(temparr));
+        dispatch(BOOLEAN_POPUPS(row));
         this.SEARCH_DATA_WITHOUT_RECENTDONARS();
     }
 
     newrowClick(row){
+        console.log(row.u_id);
         let { dispatch } =this.props
         let bool = true;
         dispatch(TEMP_UID(row.u_id));
@@ -85,8 +83,7 @@ class Search extends Component {
         let row ={};
         boolean_Status = {show : false}
         let { dispatch } =this.props
-        let data =[];
-        dispatch(BOOLEAN_POPUPS(data));
+        dispatch(BOOLEAN_POPUPS(row));
         this.SEARCH_DATA_WITHOUT_RECENTDONARS();
     }
 
@@ -113,9 +110,8 @@ class Search extends Component {
 
     onChangeCallMethod(){
         let tempTotalRegisterdDonars = this.props.TotalRegisterdDonars;
-        let tempPersonalSearchData = this.props.PersonalSearchData[0];
+        let tempPersonalSearchData = this.props.PersonalSearchData[1];
         let { dispatch } =this.props
-        console.log('onchage data')
         if(this.props.recentDonarStatus) {
             let bool = false;
             tempTotalRegisterdDonars.forEach((eachRecord)=>{
@@ -162,6 +158,23 @@ class Search extends Component {
             submitting,
             pristine, reset
         } = this.props
+        /*page: 2,  // which page you want to show as default
+         sizePerPageList: [ {
+         text: '5', value: 5
+         }, {
+         text: '10', value: 10
+         }, {
+         text: 'All', value: SearchData.length
+         } ], // you can change the dropdown list for size per page
+         sizePerPage: 5,  // which size per page you want to locate as default
+         pageStartIndex: 0, // where to start counting the pages
+         paginationSize: 3,  // the pagination bar size.
+         prePage: 'Prev', // Previous page button text
+         nextPage: 'Next', // Next page button text
+         firstPage: 'First', // First page button text
+         lastPage: 'Last', // Last page button text
+         paginationShowsTotal: this.renderShowsTotal,  // Accept bool or function
+         paginationPosition: 'top' , // default is bottom, top and both is all available*/
         var options = {
             sizePerPage: 5,
             sizePerPageList: [ {
@@ -187,6 +200,7 @@ class Search extends Component {
             }
         }
         var namesList = GetThePostRequestedDate.map(function(name){
+
             return (
                 <Nav bsStyle="pills" stacked activeKey={1} >
                     <NavItem eventKey={1} href="/home">Request Posted By {name.u_emial}</NavItem>
@@ -200,6 +214,7 @@ class Search extends Component {
                     </BootstrapTable>
                     <hr />
                     <br />
+
                 </Nav>
             );
         })
@@ -212,11 +227,34 @@ class Search extends Component {
         }
 
         return (
-            <div >
-                <Form  >
+            <div>
+                <Form horizontal >
+
                     <Panel header="Search" bsStyle="primary">
+                        <FormGroup >
+                            <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
+                            <Col sm={3}>
+                                <FormControl type="text" placeholder="Blood Group" {...bloodGroup}/>
+                            </Col>
+                            <Col componentClass={ControlLabel} sm={2}>City</Col>
+                            <Col sm={4}>
+                                <FormControl type="text" placeholder="City" {...city}/>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup>
+                            <Col smOffset={2} sm={9}>
+                                <Button type="button" className="pull-right" bsStyle="success" bsSize="large" onClick={ () => this.SEARCH_DATA() } >
+                                    Search
+                                </Button>
+                            </Col>
+                        </FormGroup>
+
+                    </Panel>
                     <FormGroup>
-                        <BootstrapTable data={SearchData} pagination options={options} striped hover search>
+                        <BootstrapTable data={SearchData} pagination options={options} striped hover
+                                        condensed
+                                        search
+                        >
                             <TableHeaderColumn isKey dataField='firstName'>First Name</TableHeaderColumn>
                             <TableHeaderColumn dataField='lastName'>Last Name</TableHeaderColumn>
                             <TableHeaderColumn dataField='occupation'>Occupation</TableHeaderColumn>
@@ -226,7 +264,6 @@ class Search extends Component {
                             <TableHeaderColumn dataField='city'>City</TableHeaderColumn>
                         </BootstrapTable>
                     </FormGroup>
-                    </Panel>
                     <Modal
                         show={boolean_result.show}
                         onHide={() => this.onCloseClick() }
@@ -237,7 +274,6 @@ class Search extends Component {
                             <Modal.Title id="contained-modal-title">Personal Information</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <br />
                             <div>
                                 <BootstrapTable data={PersonalSearchData} striped hover>
                                     <TableHeaderColumn isKey dataField='p_email'>Personal Email</TableHeaderColumn>
@@ -245,11 +281,10 @@ class Search extends Component {
                                     <TableHeaderColumn dataField='e_email'>Emergency Email</TableHeaderColumn>
                                     <TableHeaderColumn dataField='e_phone'>Emergency Contact</TableHeaderColumn>
                                 </BootstrapTable>
-                                <br />
                                 <label>
-                                    <Checkbox checked={recentDonarStatus}
-                                           onChange={ () => this.onChangeCallMethod()}>
-                                        &nbsp;Mark as Recent Donar!</Checkbox>
+                                    <input type="checkbox" checked={recentDonarStatus}
+                                           onChange={ () => this.onChangeCallMethod()}/>
+                                    Mark as Recent Donar!
                                 </label>
                             </div>
                         </Modal.Body>
@@ -258,6 +293,45 @@ class Search extends Component {
                         </Modal.Footer>
                     </Modal>
                 </Form>
+                <Panel header="POST A REQUEST" bsStyle="danger">
+                    <p>You can post a request of which blood group you want</p>
+                    <Button type="button" className="pull-right" bsStyle="primary" bsSize="large" onClick={ () => this.onPostARequestClick() }>POST A REQUEST</Button>
+                    <br /><br /><br />
+                    <Panel header="REQUESTS" bsStyle="success">
+                        <ul>{ namesList }</ul>
+                    </Panel>
+
+                </Panel>
+                <Modal
+                    show={PostRequestBoolean}
+                    onHide={() => this.onClosePostRequestClick() }
+                    container={this}
+                    aria-labelledby="contained-modal-title"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title">User Information</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <PostARequest />
+                    </Modal.Body>
+                </Modal>
+                <Modal
+                    show={commentbooleanvalue}
+                    onHide={() => this.onCloseCommentClick() }
+                    container={this}
+                    aria-labelledby="contained-modal-title"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title">Comment for the Request</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <CommentsPopup />
+                    </Modal.Body>
+                </Modal>
+                <Panel header="COMMENTS" bsStyle="success">
+                    <p>Click on the person Email-Id and comment </p>
+                    <ul>{ newList() }</ul>
+                </Panel>
             </div>
         )
     }

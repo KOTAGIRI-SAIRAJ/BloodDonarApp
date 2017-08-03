@@ -1,17 +1,11 @@
-import React, { Component, PropTypes } from 'react';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router'
-import routes from '../../components/routes'
-import autobind from 'autobind-decorator'
-import { POPUP_CHECK_BOOLEANVALUE } from '../.././actions/actions'
-import { browserHistory } from 'react-router'
+import React, {Component, PropTypes} from "react";
+import {Router} from "react-router";
+import routes from "../../components/routes";
+import autobind from "autobind-decorator";
 
-import { Grid, Row, Col, Panel} from 'react-bootstrap'
-import RegistrationForm from '../registrarionDonar'
-import SignupPage from './signup'
-import moment from 'moment'
-import momentLocalizer from 'react-widgets/lib/localizers/moment'
-
-import {Nav,Navbar, NavItem, NavDropdown, MenuItem, Jumbotron} from 'react-bootstrap'
+import {Jumbotron,PageHeader ,Well} from "react-bootstrap";
+import moment from "moment";
+import momentLocalizer from "react-widgets/lib/localizers/moment";
 
 momentLocalizer(moment)
 
@@ -21,13 +15,14 @@ export default class App extends Component {
      * Component render()
      * see: https://facebook.github.io/react/docs/reusable-components.html#es6-classes
      */
-
+    componentWillReceiveProps(nextProps) {
+        this.setState({ prevPath: this.props.location })
+        console.log(this.props);
+    }
     render() {
         return (
             <div>
-                <Jumbotron  >
-                    <h1>Blood Donar</h1>
-                </Jumbotron>
+                <Well bsSize="large" bsStyle="primary"><h1>BLOOD DONAR</h1></Well>
                 <Router history={this.props.history}>
                     {routes}
                 </Router>

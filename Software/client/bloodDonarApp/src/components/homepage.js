@@ -13,6 +13,7 @@ export default class Homepage extends Component{
     render(){
 
         return(
+
             <Carousel>
                 <Carousel.Item>
                     <img width={1280} height={720} alt="1280x720" src="../src/assets/title.jpg"/>

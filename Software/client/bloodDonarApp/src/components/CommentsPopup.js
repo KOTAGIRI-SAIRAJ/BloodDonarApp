@@ -1,48 +1,74 @@
 /**
  * Created by semanticbits on 28/7/17.
  */
-import React, {Component, PropTypes} from "react";
+import React, {Component} from "react";
 import {reduxForm} from "redux-form";
-import {Button, Col, ControlLabel, Form, FormControl, FormGroup, Grid, Panel, Row,Modal} from "react-bootstrap";
+import {Button,Well, Col, Form, FormGroup, Panel} from "react-bootstrap";
 import autobind from "autobind-decorator";
-import { TOTAL_COMMENTS,COMMENT_BOOLEAN_CHECK } from '../actions/actions'
+
+import {COMMENT_BOOLEAN_CHECK, POST_REQUEST_BOOLEAN, TOTAL_COMMENTS} from "../actions/actions";
 
 
 export const fields=[ 'comment', 'u_c_id']
-let tempUid;
 
 @autobind
 class CommentsPopup extends Component {
 
-    Comment_Data(){
+    comment_Data(){
         let { dispatch } =this.props
-        this.props.values.u_c_id = tempUid;
+        this.props.values.u_c_id = this.props.storedDataRecord.u_id;
         dispatch(TOTAL_COMMENTS(this.props.values))
         let boolval = false;
         dispatch(COMMENT_BOOLEAN_CHECK(boolval));
+        dispatch(POST_REQUEST_BOOLEAN(boolval));
+
     }
     render() {
+        const style = {
+            maxHeight:'50px',
+            minHeight:'38px',
+            resize:'none',
+            padding:'10px',
+            boxSizing:'border-box',
+            width:'350px',
+            fontSize:'15px',};
         let {
             fields: { comment , u_c_id},
-            storeUid,
+            storedDataRecord,
+            totalCommentsData,
             resetForm,
             submitting,
             pristine, reset
         } = this.props
-        tempUid =storeUid;
+        let tempArray =[]
+        totalCommentsData.forEach((eachRecord)=>{
+            if(storedDataRecord.u_id === eachRecord.u_c_id){
+                tempArray.push(eachRecord)
+            }
+        })
+        var options = {
+            noDataText: 'No Comments...',
+            /*searchPosition: 'left'*/
+        }
+        var namesList = tempArray.map(function(name){
+            return (
+                <div>
+                    <img width={30} height={30}  src="../../src/assets/person.png"/>
+                    <Well bsSize="small" bsStyle="primary">{name.comment}</Well>
+                </div>
+            );
+        })
         return (
             <div >
                 <Form horizontal >
                     <Panel header="" bsStyle="primary">
+                        { namesList }
                         <FormGroup >
-                            <Col sm={2}>Comment</Col>
-                            <Col sm={10}>
-                                <textarea type="textarea" placeholder="Comment here..." {...comment} />
+                            <Col sm={8}>
+                                <textarea style={style}  type="textarea" placeholder="Comment here..." {...comment} />
                             </Col>
-                        </FormGroup>
-                        <FormGroup>
-                            <Col smOffset={2} sm={10}>
-                                <Button type="button" className="pull-right" bsStyle="success" bsSize="large" onClick={ () => this.Comment_Data() }>
+                            <Col sm={4}>
+                                <Button type="button" className="pull-right" bsStyle="success" onClick={ () => this.comment_Data() }>
                                     SUBMIT
                                 </Button>
                             </Col>
@@ -56,7 +82,8 @@ class CommentsPopup extends Component {
 
 function selectProps (state) {
     return {
-        storeUid: state.allReducers.temp_uid,
+        storedDataRecord: state.allReducers.post_request_row_click_record,
+        totalCommentsData: state.allReducers.total_comments
     }
 }
 

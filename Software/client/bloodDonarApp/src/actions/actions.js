@@ -1,5 +1,6 @@
 /**
- * Created by semanticbits on 21/7/17.
+ * @author: @Sairaj
+ * @version: 1.0
  */
 import { createAction } from 'redux-actions'
 export const NEW_DONAR_REGISTERED_DATA = createAction('NEW_DONAR_REGISTERED_DATA') ;
@@ -14,5 +15,9 @@ export const TEMP_COMMENT = createAction('TEMP_COMMENT') ;
 export const TEMP_UID = createAction('TEMP_UID') ;
 export const RECENT_DONAR = createAction('RECENT_DONAR') ;
 export const UPDATE_DONAR_REGISTERED_DATA = createAction('UPDATE_DONAR_REGISTERED_DATA') ;
+export const POST_REQUEST_BOOLEAN = createAction('POST_REQUEST_BOOLEAN') ;
+export const POST_REQUEST_ROW_CLICK_RECORD = createAction('POST_REQUEST_ROW_CLICK_RECORD') ;
+export const DEFAULT_DONAR_DATA = createAction('DEFAULT_DONAR_DATA') ;
+export const DEFAULT_SEARCH_DATA = createAction('DEFAULT_SEARCH_DATA') ;
 
 
