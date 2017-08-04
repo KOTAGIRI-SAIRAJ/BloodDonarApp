@@ -4,7 +4,7 @@
 
 import React, {Component, PropTypes} from "react";
 import {reduxForm} from "redux-form";
-import {Button, Col, ControlLabel, Form, Checkbox,FormControl, FormGroup, Modal, Nav, NavItem, Panel} from "react-bootstrap";
+import {Button,Row, Col, ControlLabel, Form, Checkbox,FormControl, FormGroup, Modal, Nav, NavItem, Panel} from "react-bootstrap";
 import autobind from "autobind-decorator";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 import {
@@ -17,6 +17,8 @@ import {
     UPDATE_DONAR_REGISTERED_DATA
 } from "../actions/actions";
 import moment from "moment";
+import {ReactSelectize, SimpleSelect, MultiSelect} from 'react-selectize';
+
 
 
 export const fields=[ 'bloodGroup', 'city']
@@ -142,7 +144,12 @@ class Search extends Component {
             dispatch(RECENT_DONAR(bool));
         }
     }
-
+    getTheBloodGroup(res){
+        this.props.values.bloodGroup = res.value;
+    }
+    getTheCityName(res){
+        this.props.values.city = res.value;
+    }
     render() {
         var newoptions = {
             onRowClick: this.newrowClick.bind(this)
@@ -162,27 +169,6 @@ class Search extends Component {
             submitting,
             pristine, reset
         } = this.props
-        var groups = [{
-                groupId: "asia",
-                title: "Asia"
-            }, {
-                groupId: "africa",
-                title: "Africa"
-            }, {
-                groupId: "europe",
-                title: "Europe"
-            }],
-            countries = [
-                ["asia", "china"],
-                ["asia", "korea"],
-                ["asia", "japan"],
-                ["africa", "nigeria"],
-                ["africa", "congo"],
-                ["africa", "zimbabwe"],
-                ["europe", "germany"],
-                ["europe", "poland"],
-                ["europe", "spain"],
-            ];
         var options = {
             sizePerPage: 5,
             sizePerPageList: [ {
@@ -194,6 +180,12 @@ class Search extends Component {
             } ],
             onRowClick: this.rowClick.bind(this)
         }
+        let cities = [];
+        let bloodGroups =[];
+        TotalRegisterdDonars.forEach((eachRecord)=>{
+            bloodGroups.push(eachRecord.bloodGroup);
+            cities.push(eachRecord.city);
+        })
         let storeComments;
         var commentForAPerson = function gettingrecords(id) {
             storeComments = [];
@@ -235,16 +227,30 @@ class Search extends Component {
         return (
             <div >
                 <Form  >
+                    {/*<MultiSelect
+                        placeholder = "Select fruits"
+                        options = {["apple", "mango", "orange", "banana"].map(
+                            fruit => ({label: fruit, value: fruit})
+                        )}
+                        onValuesChange = {(value) => this.getTheBloodGroup(value) }
+                    />*/}
                     <Panel header="Search" bsStyle="primary">
                         <FormGroup >
-                            <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
-                            <Col sm={3}>
-                                <FormControl type="text" placeholder="Blood Group" {...bloodGroup}/>
+                            <Row className="show-grid">
+                            <Col sm={5}>
+                                <SimpleSelect
+                                placeholder="Select a Blood Group"
+                                options = {bloodGroups.map(
+                                    eachbloodGroup => ({label: eachbloodGroup, value: eachbloodGroup})
+                                )} onValueChange={(value) => this.getTheBloodGroup(value) }/>
                             </Col>
-                            <Col componentClass={ControlLabel} sm={2}>City</Col>
-                            <Col sm={4}>
-                                <FormControl type="text" placeholder="City" {...city}/>
-                            </Col>
+                            <Col sm={4} md={6}>
+                                <SimpleSelect
+                                placeholder="Search for a City Name"
+                                options = {cities.map(
+                                    eachCity=> ({label: eachCity, value: eachCity})
+                                )} onValueChange={(value) => this.getTheCityName(value) }/></Col>
+                            </Row>
                         </FormGroup>
                         <br /><br />
                         <FormGroup>
@@ -257,7 +263,7 @@ class Search extends Component {
 
                     </Panel>
                     <FormGroup>
-                        <BootstrapTable data={SearchData} pagination options={options} striped hover search>
+                        <BootstrapTable data={SearchData} pagination options={options} striped hover >
                             <TableHeaderColumn isKey dataField='firstName'>First Name</TableHeaderColumn>
                             <TableHeaderColumn dataField='lastName'>Last Name</TableHeaderColumn>
                             <TableHeaderColumn dataField='occupation'>Occupation</TableHeaderColumn>
