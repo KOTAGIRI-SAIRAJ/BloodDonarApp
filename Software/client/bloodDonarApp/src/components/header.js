@@ -222,6 +222,11 @@ class Header extends Component {
                                 <NavItem eventKey={4} href="#">Post A Request</NavItem>
                             </LinkContainer>
                         </Nav>
+                        <Nav>
+                            <LinkContainer to='/requests'>
+                                <NavItem eventKey={5} href="#">Recent Requests</NavItem>
+                            </LinkContainer>
+                        </Nav>
                     </Navbar.Collapse>
                 </Navbar>
 

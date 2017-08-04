@@ -162,6 +162,27 @@ class Search extends Component {
             submitting,
             pristine, reset
         } = this.props
+        var groups = [{
+                groupId: "asia",
+                title: "Asia"
+            }, {
+                groupId: "africa",
+                title: "Africa"
+            }, {
+                groupId: "europe",
+                title: "Europe"
+            }],
+            countries = [
+                ["asia", "china"],
+                ["asia", "korea"],
+                ["asia", "japan"],
+                ["africa", "nigeria"],
+                ["africa", "congo"],
+                ["africa", "zimbabwe"],
+                ["europe", "germany"],
+                ["europe", "poland"],
+                ["europe", "spain"],
+            ];
         var options = {
             sizePerPage: 5,
             sizePerPageList: [ {
@@ -215,6 +236,26 @@ class Search extends Component {
             <div >
                 <Form  >
                     <Panel header="Search" bsStyle="primary">
+                        <FormGroup >
+                            <Col componentClass={ControlLabel} sm={2}>Blood Group</Col>
+                            <Col sm={3}>
+                                <FormControl type="text" placeholder="Blood Group" {...bloodGroup}/>
+                            </Col>
+                            <Col componentClass={ControlLabel} sm={2}>City</Col>
+                            <Col sm={4}>
+                                <FormControl type="text" placeholder="City" {...city}/>
+                            </Col>
+                        </FormGroup>
+                        <br /><br />
+                        <FormGroup>
+                            <Col smOffset={2} sm={9}>
+                                <Button type="button" className="pull-right" bsStyle="success" onClick={ () => this.SEARCH_DATA() } >
+                                    Search
+                                </Button>
+                            </Col>
+                        </FormGroup>
+
+                    </Panel>
                     <FormGroup>
                         <BootstrapTable data={SearchData} pagination options={options} striped hover search>
                             <TableHeaderColumn isKey dataField='firstName'>First Name</TableHeaderColumn>
@@ -226,7 +267,7 @@ class Search extends Component {
                             <TableHeaderColumn dataField='city'>City</TableHeaderColumn>
                         </BootstrapTable>
                     </FormGroup>
-                    </Panel>
+
                     <Modal
                         show={boolean_result.show}
                         onHide={() => this.onCloseClick() }
